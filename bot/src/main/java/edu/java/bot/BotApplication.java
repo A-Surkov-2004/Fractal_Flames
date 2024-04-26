@@ -30,6 +30,7 @@ public class BotApplication {
         Map<String, Map<String, String>> obj = yaml.load(inputStream);
 
         bot = new TelegramBot(obj.get("app").get("telegram-token"));
+        System.out.println(bot);
         SpringApplication.run(BotApplication.class, args);
         CommandReader cmdReader = new CommandReader();
 

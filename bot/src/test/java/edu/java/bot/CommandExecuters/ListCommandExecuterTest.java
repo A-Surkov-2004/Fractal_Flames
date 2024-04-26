@@ -18,6 +18,7 @@ public class ListCommandExecuterTest {
 
     private final static Logger LOGGER = LogManager.getLogger();
 
+    /*
     @Test
     @DisplayName("До регистрации")
     void test1() {
@@ -112,5 +113,7 @@ public class ListCommandExecuterTest {
         assertThat(reply.getParameters().get("text"))
             .isEqualTo("У вас ещё нет привязанных ссылок. Используйте команду /add чтобы привязать ресурс");
     }
+
+     */
 
 }

@@ -1,6 +1,7 @@
 package edu.java.bot.CommandExecuters;
 
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SendMessage;
 import static edu.java.bot.UserDataMapClass.userData;
 
@@ -13,7 +14,7 @@ public class AddCommandExecuter extends BasicCommandExecuter {
     }
 
     @Override
-    public SendMessage execute(Update update) {
+    public BaseRequest execute(Update update) {
         long id = update.message().chat().id();
         if (!userData.containsKey(id)) {
             reply = new SendMessage(
