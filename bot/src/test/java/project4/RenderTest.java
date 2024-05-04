@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class RenderTest {
 
@@ -22,8 +22,6 @@ class RenderTest {
         // given
         AfinGen afinGen = new AfinGen();
         Render render = new Render();
-        //mod.pillow = true;
-        //mod.disk = true;
 
         //when
         render.setRatio(2.7777*2, 2*2);
@@ -38,10 +36,41 @@ class RenderTest {
         instructions.add(commandLine);
 
         Pixel[][] pixels = render.render(afinGen.genAfin(100), 1000, 1000, instructions);
-        pixels = render.gammaCor(pixels);
-        //Drawer painter = new Drawer(path);
-        //painter.draw(pixels);
-
+        pixels = render.gammaCor(pixels, 2.3);
     }
+
+    @Test
+    @DisplayName("Одинаковые инструкции")
+    void test7() throws Exception {
+
+        // 1 = standalone method
+        // 2 = tg_bot method
+
+
+        // given1
+
+        //given2
+        UserClass user = new UserClass();
+
+        //when1
+        List<String> commandLine = new ArrayList<>();
+        commandLine.add("sphere");
+        commandLine.add("swirl");
+        commandLine.add("horseshoe");
+
+        List<List<String>> instructions = new ArrayList<>();
+        instructions.add(commandLine);
+
+        //when2
+        user.addLine();
+        user.addCommandWord("sphere");
+        user.addCommandWord("swirl");
+        user.addCommandWord("horseshoe");
+
+        //then
+        assertThat(user.getCommands())
+            .isEqualTo(instructions);
+    }
+
 
 }

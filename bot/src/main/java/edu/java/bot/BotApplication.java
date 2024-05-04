@@ -4,9 +4,16 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.configuration.ApplicationConfig;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
@@ -18,10 +25,18 @@ import org.yaml.snakeyaml.Yaml;
 @SpringBootApplication
 @EnableConfigurationProperties(ApplicationConfig.class)
 public class BotApplication {
-    private final static Logger LOGGER = LogManager.getLogger();
+
     public static TelegramBot bot;
+    //private static final Set<String> exclusions = Set.of(".\\.git", ".\\.github", ".\\bot\\target", ".\\.idea",
+    //    ".\\target", ".\\.mvn", ".\\bot\\src\\test");
+
+    private static final Set<String> exclusions = new HashSet<>();
 
     public static void main(String[] args) throws FileNotFoundException {
+
+        Collection<File> all = new ArrayList<File>();
+        addTree(new File("/data"), all);
+        //System.out.println(all);
 
         Yaml yaml = new Yaml();
         InputStream inputStream = ApplicationConfig.class
@@ -56,8 +71,21 @@ public class BotApplication {
                 e.response().description();
             } else {
                 // probably network error
-                LOGGER.warn(e);
             }
         });
     }
+
+    static void addTree(File file, Collection<File> all) {
+        File[] children = file.listFiles();
+        if (children != null) {
+            for (File child : children) {
+                if(!exclusions.contains(child.toString())) {
+                    System.out.println(child.toString());
+                    all.add(child);
+                    addTree(child, all);
+                }
+            }
+        }
+    }
+
 }

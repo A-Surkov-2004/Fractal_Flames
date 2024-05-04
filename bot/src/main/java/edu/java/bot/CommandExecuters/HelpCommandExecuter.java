@@ -17,22 +17,30 @@ public class HelpCommandExecuter extends BasicCommandExecuter {
 
     @Override
     public BaseRequest execute(Update update) {
+
+        String info = """
+            Данный телеграмм бот предназначен для генерации изображений фрактального пламени. Генератор обладает высокой гибкостью, но может быть сложен в управлении. Для решения этой проблемы существует данная справка, а также несколько вспомогательных команд.
+
+            Основы взаимодействия.
+            Для генерации изображения используется набор модификаторов. Все доступные модификаторы можно найти по команде /mods
+            Генератор принимает одну или несколько \"командных строк\", каждая строка содержит упрядоченный список модификаторов. Эксперементируйте с конфигурацией модификаторов для получения уникальных изображений!
+            Команды управления конфигурацией: /configuration
+            Просмотреть выставленные настройки: /settings
+
+            Дополнительные настройки.
+            Помимо изменения конфигурации модификаторов, вы также можете:
+            Изменять масштаб изображения /ratio
+            Устанавливать цветовую гамму /colors
+            Менять яркость изображения /gamma
+
+            Когда будете готовы запустить генератор, используйте команду /generate. Будьте терпеливы, генерация и отправка изображения занимает какое-то время!
+            """;
+
+
         long id = update.message().chat().id();
-        if (userData.containsKey(id)) {
-            Set<BasicCommandExecuter> executers = allExe;
-            StringBuilder commands = new StringBuilder();
-            commands.append("Список доступных команд:\n");
-            for (BasicCommandExecuter executer : executers) {
-                commands.append(executer.getName());
-                commands.append(" - ");
-                commands.append(executer.getDescription());
-                commands.append("\n");
-            }
-            reply = (new SendMessage(id, commands.toString()));
-        } else {
-            reply =
-                (new SendMessage(id, "Вы не зарегестрированы в системе. Используйте команду /start, чтобы начать."));
-        }
+
+        reply = (new SendMessage(id, info));
+
         return reply;
     }
 }

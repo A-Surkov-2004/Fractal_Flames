@@ -16,6 +16,8 @@ public class ColorsEnum {
     public static ColorsEnum PURPLE = new ColorsEnum("СИРЕНЕВЫЙ");
     public static ColorsEnum PINK = new ColorsEnum("РОЗОВЫЙ");
 
+    public static ColorsEnum EVERY = new ColorsEnum("ЛЮБОЙ");
+
     @Override
     public String toString() {
         return name;

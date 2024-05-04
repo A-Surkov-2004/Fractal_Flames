@@ -40,7 +40,7 @@ public class Drawer {
                 if (pixels[i][j] != null) {
                     Color curColor = new Color(pixels[i][j].r, pixels[i][j].g, pixels[i][j].b);
                     g.setColor(curColor);
-                    g.drawRect(j, i, 1, 1);
+                    g.drawOval(j, i, 1, 1);
                 }
             }
         }

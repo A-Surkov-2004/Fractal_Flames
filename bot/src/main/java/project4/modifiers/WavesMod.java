@@ -2,8 +2,6 @@ package project4.modifiers;
 
 import project4.Render;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 public class WavesMod extends BasicMod {
 
     public WavesMod(String name) {

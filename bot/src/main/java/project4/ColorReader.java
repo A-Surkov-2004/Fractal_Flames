@@ -31,6 +31,9 @@ public class ColorReader {
         if(color == ColorsEnum.PINK){
             afinGen.setColorBorders(200, 0, 200, 255, 125, 255);
         }
+        if (color == ColorsEnum.EVERY){
+            afinGen.setColorBorders(50, 50, 50, 255, 255, 255);
+        }
         return afinGen;
     }
 }

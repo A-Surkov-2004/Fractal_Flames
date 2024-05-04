@@ -4,9 +4,7 @@ import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SendMessage;
-import com.pengrad.telegrambot.request.SendPhoto;
 import com.pengrad.telegrambot.request.SetMyCommands;
-import com.pengrad.telegrambot.response.SendResponse;
 import edu.java.bot.CommandExecuters.AddCommandExecuter;
 import edu.java.bot.CommandExecuters.AddLineExecuter;
 import edu.java.bot.CommandExecuters.BasicCommandExecuter;
@@ -17,14 +15,20 @@ import edu.java.bot.CommandExecuters.RemoveCommandExecuter;
 import edu.java.bot.CommandExecuters.RemoveLineExecuter;
 import edu.java.bot.CommandExecuters.RemoveWordExecuter;
 import edu.java.bot.CommandExecuters.SetCLExecuter;
-import edu.java.bot.CommandExecuters.SetColorCommands.SetCorolBlue;
-import edu.java.bot.CommandExecuters.SetColorCommands.SetCorolGreen;
-import edu.java.bot.CommandExecuters.SetColorCommands.SetCorolOrange;
-import edu.java.bot.CommandExecuters.SetColorCommands.SetCorolPink;
-import edu.java.bot.CommandExecuters.SetColorCommands.SetCorolPurple;
-import edu.java.bot.CommandExecuters.SetColorCommands.SetCorolRed;
-import edu.java.bot.CommandExecuters.SetColorCommands.SetCorolYellow;
+import edu.java.bot.CommandExecuters.SetColorCommands.SetColorBlue;
+import edu.java.bot.CommandExecuters.SetColorCommands.SetColorEvery;
+import edu.java.bot.CommandExecuters.SetColorCommands.SetColorGreen;
+import edu.java.bot.CommandExecuters.SetColorCommands.SetColorOrange;
+import edu.java.bot.CommandExecuters.SetColorCommands.SetColorPink;
+import edu.java.bot.CommandExecuters.SetColorCommands.SetColorPurple;
+import edu.java.bot.CommandExecuters.SetColorCommands.SetColorRed;
+import edu.java.bot.CommandExecuters.SetColorCommands.SetColorYellow;
+import edu.java.bot.CommandExecuters.SetGammaExecuter;
 import edu.java.bot.CommandExecuters.SetRatioExecuter;
+import edu.java.bot.CommandExecuters.ShowCollorsExecuter;
+import edu.java.bot.CommandExecuters.ShowConfEdits;
+import edu.java.bot.CommandExecuters.ShowModifiers;
+import edu.java.bot.CommandExecuters.ShowSettingsExecuter;
 import edu.java.bot.CommandExecuters.StartCommandExecuter;
 import edu.java.bot.CommandExecuters.addComandWorldExecuters.AddWordExecuter;
 import edu.java.bot.MessageAccepters.AddLinkAccepter;
@@ -34,6 +38,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import edu.java.bot.MessageAccepters.SetCLAccepter;
+import edu.java.bot.MessageAccepters.SetGammaAccepter;
 import edu.java.bot.MessageAccepters.SetRatioAccepter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,6 +47,9 @@ import static edu.java.bot.UserDataMapClass.userData;
 
 public class CommandReader {
     public static Set<BasicCommandExecuter> allExe = new HashSet<>();
+    public static Set<BasicCommandExecuter> allMods = new HashSet<>();
+    public static Set<BasicCommandExecuter> allColors = new HashSet<>();
+    public static Set<BasicCommandExecuter> allConfigs = new HashSet<>();
     public static Set<BasicAccepter> allAcc = new HashSet<>();
     private final static Logger LOGGER = LogManager.getLogger();
 
@@ -53,41 +61,51 @@ public class CommandReader {
         allAcc.add(new RemoveLinkAccepter(RemoveCommandExecuter.GIVEN_STATE));
         allAcc.add(new SetCLAccepter(SetCLExecuter.GIVEN_STATE));
         allAcc.add(new SetRatioAccepter(SetRatioExecuter.GIVEN_STATE));
+        allAcc.add(new SetGammaAccepter(SetGammaExecuter.GIVEN_STATE));
 
 
-        allExe.add(new SetCorolRed("/red", "Set color to red"));
-        allExe.add(new SetCorolOrange("/orange", "Set color to orange"));
-        allExe.add(new SetCorolYellow("/yellow", "Set color to yellow"));
-        allExe.add(new SetCorolGreen("/green", "Set color to green"));
-        allExe.add(new SetCorolBlue("/blue", "Set color to blue"));
-        allExe.add(new SetCorolPurple("/purple", "Set color to purple"));
-        allExe.add(new SetCorolPink("/pink", "Set color to pink"));
+        allColors.add(new SetColorRed("/red", "Set color to red"));
+        allColors.add(new SetColorOrange("/orange", "Set color to orange"));
+        allColors.add(new SetColorYellow("/yellow", "Set color to yellow"));
+        allColors.add(new SetColorGreen("/green", "Set color to green"));
+        allColors.add(new SetColorBlue("/blue", "Set color to blue"));
+        allColors.add(new SetColorPurple("/purple", "Set color to purple"));
+        allColors.add(new SetColorPink("/pink", "Set color to pink"));
+        allColors.add(new SetColorEvery("/white", "Removes all color limitations"));
+        allExe.addAll(allColors);
 
 
-        allExe.add(new AddWordExecuter("/diamond", "Draws specified shape or shaped lines"));
-        allExe.add(new AddWordExecuter("/disk", "Draws specified shape or shaped lines"));
-        allExe.add(new AddWordExecuter("/fisheye", "Draws specified shape or shaped lines"));
-        allExe.add(new AddWordExecuter("/handkerchief", "Draws specified shape or shaped lines"));
-        allExe.add(new AddWordExecuter("/heart", "Draws specified shape or shaped lines"));
-        allExe.add(new AddWordExecuter("/horseshoe", "Draws specified shape or shaped lines"));
-        allExe.add(new AddWordExecuter("/hyperbolic", "Draws specified shape or shaped lines"));
-        allExe.add(new AddWordExecuter("/pdj", "Draws specified shape or shaped lines"));
-        allExe.add(new AddWordExecuter("/pillow", "Draws specified shape or shaped lines"));
-        allExe.add(new AddWordExecuter("/polar", "Draws specified shape or shaped lines"));
-        allExe.add(new AddWordExecuter("/sin", "Draws specified shape or shaped lines"));
-        allExe.add(new AddWordExecuter("/sphere", "Draws specified shape or shaped lines"));
-        allExe.add(new AddWordExecuter("/spiral", "Draws specified shape or shaped lines"));
-        allExe.add(new AddWordExecuter("/swirl", "Draws specified shape or shaped lines"));
-        allExe.add(new AddWordExecuter("/waves", "Draws specified shape or shaped lines"));
+        allMods.add(new AddWordExecuter("/diamond", "Draws specified shape or shaped lines"));
+        allMods.add(new AddWordExecuter("/disk", "Draws specified shape or shaped lines"));
+        allMods.add(new AddWordExecuter("/handkerchief", "Draws specified shape or shaped lines"));
+        allMods.add(new AddWordExecuter("/heart", "Draws specified shape or shaped lines"));
+        allMods.add(new AddWordExecuter("/horseshoe", "Draws specified shape or shaped lines"));
+        allMods.add(new AddWordExecuter("/hyperbolic", "Draws specified shape or shaped lines"));
+        allMods.add(new AddWordExecuter("/pdj", "Draws specified shape or shaped lines"));
+        allMods.add(new AddWordExecuter("/pillow", "Draws specified shape or shaped lines"));
+        allMods.add(new AddWordExecuter("/polar", "Draws specified shape or shaped lines"));
+        allMods.add(new AddWordExecuter("/sin", "Draws specified shape or shaped lines"));
+        allMods.add(new AddWordExecuter("/sphere", "Draws specified shape or shaped lines"));
+        allMods.add(new AddWordExecuter("/spiral", "Draws specified shape or shaped lines"));
+        allMods.add(new AddWordExecuter("/swirl", "Draws specified shape or shaped lines"));
+        allExe.addAll(allMods);
 
-        //allExe.add(new AddCommandExecuter("/addModifier", "Add modifier to current command line"));
-        allExe.add(new ClearLineExecuter("/clear_line", "Clears current command line"));
-        allExe.add(new GenerateExecuter("/generate", "Create your image!"));
-        allExe.add(new RemoveLineExecuter("/remove_line", "removes current line"));
-        allExe.add(new RemoveWordExecuter("/remove_mod", "Removes last modifier from current command line"));
-        allExe.add(new SetCLExecuter("/set_current_line", "Changes selected command line"));
-        allExe.add(new SetRatioExecuter("/set_ratio", "Sets image ratio"));
-        allExe.add(new AddLineExecuter("/add_line", "Ads a new command line and makes it current line"));
+        allConfigs.add(new ClearLineExecuter("/clear_line", "Clears current command line"));
+        allConfigs.add(new GenerateExecuter("/generate", "Create your image!"));
+        allConfigs.add(new RemoveLineExecuter("/remove_line", "removes current line"));
+        allConfigs.add(new RemoveWordExecuter("/remove_mod", "Removes last modifier from current command line"));
+        allConfigs.add(new SetCLExecuter("/set_current_line", "Changes selected command line"));
+        allConfigs.add(new AddLineExecuter("/add_line", "Ads a new command line and makes it current line"));
+        allConfigs.add(new ShowSettingsExecuter("/settings", "Shows all current generation settings"));
+        allExe.addAll(allConfigs);
+
+        allExe.add(new SetRatioExecuter("/" +
+            "ratio", "Sets image ratio"));
+        allExe.add(new ShowModifiers("/mods","Shows all available modifiers"));
+        allExe.add(new ShowCollorsExecuter("/colors","Shows all available colors"));
+        allExe.add(new ShowConfEdits("/configuration","Shows all methods to edit command lines"));
+        allExe.add(new SetGammaExecuter("/gamma","Sets gamma to new value"));
+
 
 
         publishCommands(allExe);

@@ -4,9 +4,9 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import static edu.java.bot.UserDataMapClass.userData;
 
-public class SetCLAccepter extends BasicAccepter {
+public class SetGammaAccepter extends BasicAccepter {
 
-    public SetCLAccepter(String requiredState) {
+    public SetGammaAccepter(String requiredState) {
         super(requiredState);
     }
 
@@ -17,17 +17,15 @@ public class SetCLAccepter extends BasicAccepter {
 
         boolean ok = false;
 
-
-
         try {
-            ok = userData.get(id).setCL(Integer.parseInt(update.message().text())-1);
+            ok = userData.get(id).setGamma(Double.parseDouble(update.message().text()));
         }catch (Exception e){
             System.out.println(e);
         }
         if(ok) {
-            reply = (new SendMessage(id, "Выбраная командная строка: " + (userData.get(id).getCL()+1)+"\n" + userData.get(id).printCommands()));
+            reply = (new SendMessage(id, "Установлена новая гамма: " + userData.get(id).getGamma()));
         }else {
-            reply = (new SendMessage(id, "Произошла ошибка. Командная строка не изменена. Выбраная строка:" + (userData.get(id).getCL()+1)));
+            reply = (new SendMessage(id, "Произошла ошибка. Масштаб не изменен. Текущий масштаб: " + userData.get(id).getGamma()));
         }
         userData.get(id).stateReset();
         return this.reply;

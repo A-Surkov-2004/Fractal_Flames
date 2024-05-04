@@ -1,15 +1,8 @@
 package project4;
 
-import edu.java.bot.CommandReader;
 import edu.java.bot.UserClass;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,6 +10,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @SuppressWarnings("MagicNumber")
 public class Render {
@@ -26,6 +21,7 @@ public class Render {
     private final static int Y_RES = 1080;
     private double xRatioDispers = 1.777;
     private double yRatioDispers = 1;
+    private int totalPix = 0;
     Path p = UserClass.EMPTY_IMAGE_PATH;
     String path = p.toString();
     //Drawer d = new Drawer(path);
@@ -55,13 +51,31 @@ public class Render {
                 throw new RuntimeException(e);
             }
         };
-        try (ExecutorService service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())) {
-            for (int i = 0; i < n; i++) {
+        /*
 
+        try(ExecutorService service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())){
+            for (int i = 0; i < n; i++) {
                 service.submit(task1);
             }
         }
+
+        System.out.println(totalPix);
+         //*/
+
+
+///*
+        for (int i = 0; i < n; i++) {
+            try {
+                renderTask(afins, it, instructions);
+            } catch (IOException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+ //*/
+
         return pixels;
+
     }
 
     /*public Pixel[][] renderSingleStream(Afin[] afins, int n, int it, Modifiers mod) {
@@ -111,9 +125,8 @@ public class Render {
 
      */
 
-    public Pixel[][] gammaCor(Pixel[][] pixels) {
+    public Pixel[][] gammaCor(Pixel[][] pixels, double gamma) {
         double max = 0;
-        double gamma = 2.3;
         for (int row = 0; row < Y_RES; row++) {
             for (int col = 0; col < X_RES; col++) {
                 if (pixels[row][col] != null) {
@@ -147,7 +160,8 @@ public class Render {
         double newX = ThreadLocalRandom.current().nextDouble(xRatioDispers * 2) - xRatioDispers;
         double newY = ThreadLocalRandom.current().nextDouble(yRatioDispers * 2) - yRatioDispers;
 
-        for (int step = -20; step < it; step++) {
+        for (int step = -20; step < it; step++)
+        {
 
             rands[0] = ThreadLocalRandom.current().nextDouble(-2,2);
             rands[1] = ThreadLocalRandom.current().nextDouble(-2,2);
@@ -188,6 +202,7 @@ public class Render {
                         pixels[y1][x1].b = (pixels[y1][x1].b + afins[afinIndex].blue()) / 2;
                     }
                     pixels[y1][x1].hits++;
+                    totalPix++;
                     if(step % 1000 == 0){
 
 

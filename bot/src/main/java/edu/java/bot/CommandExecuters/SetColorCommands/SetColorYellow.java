@@ -6,16 +6,16 @@ import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.CommandExecuters.BasicCommandExecuter;
 import static edu.java.bot.UserDataMapClass.userData;
 
-public class SetCorolRed extends BasicCommandExecuter {
+public class SetColorYellow extends BasicCommandExecuter {
 
-    public SetCorolRed(String name, String description) {
+    public SetColorYellow(String name, String description) {
         super(name, description);
     }
 
     @Override
     public BaseRequest execute(Update update) {
         long id = update.message().chat().id();
-        userData.get(id).setColor(ColorsEnum.RED);
+        userData.get(id).setColor(ColorsEnum.YELLOW);
         reply = (new SendMessage(id, "Установлен новый цвет: " + userData.get(id).getColor().toString()));
         return this.reply;
     }

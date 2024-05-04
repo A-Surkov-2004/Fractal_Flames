@@ -19,16 +19,18 @@ public class UserClass {
 
     private static final double BASIC_X_RATIO = 1.777;
     private static final double BASIC_Y_RATIO = 1;
+    private static final double BASIC_GAMMA = 2.3;
 
-    public static final Path TEMPERAL_IMAGE_PATH = Path.of("bot","src","main", "java", "project4", "tempFiles", "Image.jpg");
-    public static final Path EMPTY_IMAGE_PATH = Path.of("bot","src","main", "java", "project4", "Image.jpg");
+    public static final Path TEMPERAL_IMAGE_PATH = Path.of(".","bot","src","main", "java", "project4", "tempFiles", "Image.jpg");
+    public static final Path EMPTY_IMAGE_PATH = Path.of(".","bot","src","main", "java", "project4", "Image.jpg");
     private static final int MAX_WORDS_IN_CL = 10;
     private static final int MAX_LINES = 10;
     public final static String DEFAULT_STATE = "default";
     private String state;
     private Set<String> links = new HashSet<>();
-    private ColorsEnum color = ColorsEnum.RED;
+    private ColorsEnum color = ColorsEnum.EVERY;
     private double ratio = 1;
+    private double gamma = 1;
 
     FractalCommandReader cmr = new FractalCommandReader();
 
@@ -91,7 +93,7 @@ public class UserClass {
 
     public boolean removeWordFromLine(){
         if(!commands.isEmpty()){
-            commands.removeLast();
+            commands.get(currentCL).remove(commands.get(currentCL).size()-1);
             return true;
         }
         return false;
@@ -101,6 +103,7 @@ public class UserClass {
     public boolean addLine(){
         if(commands.size() <= MAX_LINES){
             commands.add(new ArrayList<>());
+            setCL(commands.size()-1);
             return true;
         }
         return false;
@@ -109,6 +112,9 @@ public class UserClass {
     public boolean removeLine(){
         if(commands.size() > 1) {
             commands.remove(currentCL);
+            if(currentCL >= commands.size()){
+                setCL(currentCL-1);
+            }
             return true;
         }
         return false;
@@ -135,19 +141,62 @@ public class UserClass {
         StringBuilder sb = new StringBuilder();
         sb.append("Текущий список команд: \n");
         for(int i = 0; i < commands.size(); i++){
-            sb.append(i);
+            sb.append(i+1);
             sb.append(") ");
             for (int j = 0; j < commands.get(i).size(); j++){
                 sb.append(commands.get(i).get(j));
-                sb.append(" ");
+                if(j != commands.get(i).size()-1) {
+                    sb.append(", ");
+                }
+            }
+            if(commands.get(i).isEmpty()){
+                sb.append("lines (default)");
+            }
+            if (currentCL == i){
+                sb.append(" <--");
             }
             sb.append('\n');
         }
         return sb.toString();
     }
 
+    public String printAllSettings(){
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Цвет: ");
+        sb.append(color.toString());
+        sb.append("\n");
+
+        sb.append("Масштаб: ");
+        sb.append(ratio);
+        sb.append("\n");
+
+        sb.append("Яркость: ");
+        sb.append(gamma);
+        sb.append("\n");
+
+        sb.append("\n");
+        sb.append(printCommands());
+
+        return sb.toString();
+    }
+
     public List<List<String>> getCommands(){
         return commands;
+    }
+
+    public boolean setGamma(double gamma){
+        if(gamma >= 0.1 && gamma <= 10){
+            this.gamma = gamma;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public double getGamma(){
+        return this.gamma;
     }
 
     public void generate() throws IOException {
@@ -158,9 +207,9 @@ public class UserClass {
 
         render.setRatio(BASIC_X_RATIO*this.ratio, BASIC_Y_RATIO*this.ratio);
         AfinGen afinGen = colorReader.gerateAfins(this.color);
-        System.out.println(commands.get(0));
+        System.out.println(commands);
         Pixel[][] pixels = render.render(afinGen.genAfin(100), 1000, 10000, commands);
-        pixels = render.gammaCor(pixels);
+        pixels = render.gammaCor(pixels, BASIC_GAMMA * gamma);
         try {
             d.draw(pixels);
         }catch (InterruptedException e){
