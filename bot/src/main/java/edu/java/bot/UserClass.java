@@ -21,8 +21,8 @@ public class UserClass {
     private static final double BASIC_Y_RATIO = 1;
     private static final double BASIC_GAMMA = 2.3;
 
-    public static final Path TEMPERAL_IMAGE_PATH = Path.of(".","bot","src","main", "java", "project4", "tempFiles", "Image.jpg");
-    public static final Path EMPTY_IMAGE_PATH = Path.of(".","bot","src","main", "java", "project4", "Image.jpg");
+    public static final Path TEMPERAL_IMAGE_PATH = Path.of(".","data","tempImage.jpg");
+    public static final Path EMPTY_IMAGE_PATH = Path.of(".", "data","backgroundImage.jpg");
     private static final int MAX_WORDS_IN_CL = 10;
     private static final int MAX_LINES = 10;
     public final static String DEFAULT_STATE = "default";
@@ -31,6 +31,7 @@ public class UserClass {
     private ColorsEnum color = ColorsEnum.EVERY;
     private double ratio = 1;
     private double gamma = 1;
+    public boolean shutdownReq = false;
 
     FractalCommandReader cmr = new FractalCommandReader();
 

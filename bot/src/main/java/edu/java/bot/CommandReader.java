@@ -1,10 +1,13 @@
 package edu.java.bot;
 
+import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.BaseRequest;
+import com.pengrad.telegrambot.request.GetUpdates;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.request.SetMyCommands;
+import com.pengrad.telegrambot.response.GetUpdatesResponse;
 import edu.java.bot.CommandExecuters.AddCommandExecuter;
 import edu.java.bot.CommandExecuters.AddLineExecuter;
 import edu.java.bot.CommandExecuters.BasicCommandExecuter;
@@ -35,6 +38,7 @@ import edu.java.bot.MessageAccepters.AddLinkAccepter;
 import edu.java.bot.MessageAccepters.BasicAccepter;
 import edu.java.bot.MessageAccepters.RemoveLinkAccepter;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import edu.java.bot.MessageAccepters.SetCLAccepter;
@@ -113,10 +117,29 @@ public class CommandReader {
 
     public void read(Update update) {
 
-        System.out.println("reading command");
 
         String message = update.message().text();
         long id = update.message().chat().id();
+        System.out.println("reading command: " + update.message().text());
+        if(userData.containsKey(id)) {
+            if (Objects.equals(message, BotApplication.exitWord) && message != null) {
+                if (!userData.get(id).shutdownReq) {
+                    bot.execute(new SendMessage(
+                        id,
+                        "Ввод команды " + BotApplication.exitWord + " два раза подряд остановит программу."
+                    ));
+                    userData.get(id).shutdownReq = true;
+                } else {
+                    bot.execute(new SendMessage(id, "Завершение работы"));
+                    System.exit(130);
+                }
+                return;
+            } else if (userData.get(id).shutdownReq) {
+                userData.get(id).shutdownReq = false;
+            }
+        }
+
+
         if (!userData.containsKey(id) || Objects.equals(userData.get(id).stateGet(), UserClass.DEFAULT_STATE)) {
             boolean commandFound = false;
             for (BasicCommandExecuter command : allExe) {
@@ -133,7 +156,7 @@ public class CommandReader {
                     bot.execute(response);
                 }
             }
-            if (!commandFound) {
+            if (!commandFound && !Objects.equals(message, BotApplication.exitWord)) {
                 bot.execute(new SendMessage(
                     id,
                     "Команда не распознана. Используйте команду /help для получения списка допустимых команд"
