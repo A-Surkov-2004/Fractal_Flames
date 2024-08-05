@@ -1,12 +1,7 @@
 package edu.java.bot;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.request.GetUpdates;
-import com.pengrad.telegrambot.response.GetUpdatesResponse;
 import edu.java.bot.configuration.ApplicationConfig;
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,45 +14,44 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-
+import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.yaml.snakeyaml.Yaml;
 
-
 @SpringBootApplication
+@Log4j2
 @EnableConfigurationProperties(ApplicationConfig.class)
 public class BotApplication {
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     public static TelegramBot bot;
     public static String exitWord = getExitWord();
 
-    //private static final Set<String> exclusions = Set.of(".\\.git", ".\\.github", ".\\bot\\target", ".\\.idea",
-    //    ".\\target", ".\\.mvn", ".\\bot\\src\\test");
-
-    private static final Set<String> exclusions = new HashSet<>();
+    private static final Set<String> EXCLUSIONS = Set.of(".\\.git", ".\\.github", ".\\bot\\target", ".\\.idea",
+        ".\\target", ".\\.mvn", ".\\bot\\src\\test"
+    );
 
     public static void main(String[] args) throws IOException {
 
-
-        File logfile =  Path.of("./data/log.txt").toFile();
+        File logfile = Path.of("./data/log.txt").toFile();
         PrintWriter writer = new PrintWriter(logfile.toString(), StandardCharsets.UTF_8);
 
-        try{
+        try {
 
             Collection<File> all = new ArrayList<File>();
             addTree(new File("./"), all);
             //System.out.println(all);
 
-            // File path is passed as parameter
             Path tokenpath = Path.of("./").toAbsolutePath();
-            System.out.println(tokenpath);
+            LOGGER.error(tokenpath);
             File file = new File(
                 "./token.txt");
 
@@ -67,8 +61,8 @@ public class BotApplication {
                 BufferedReader br = new BufferedReader(new FileReader(file));
                 token = br.readLine();
 
-            }catch (FileNotFoundException e){
-                System.out.println("no token.txt found. Using YML");
+            } catch (FileNotFoundException e) {
+                LOGGER.error("no token.txt found. Using YML");
                 Yaml yaml = new Yaml();
                 InputStream inputStream = ApplicationConfig.class
                     .getClassLoader()
@@ -77,14 +71,13 @@ public class BotApplication {
                 token = obj.get("app").get("telegram-token");
             }
 
-            System.out.println(token);
-            System.out.println("^token");
+            LOGGER.always().log(token);
 
-            System.out.println(exitWord);
-            System.out.println("^exitWord");
+            LOGGER.always().log(exitWord);
+            LOGGER.always().log("^exitWord");
 
             bot = new TelegramBot(token);
-            System.out.println(bot);
+            LOGGER.always().log(bot);
             SpringApplication.run(BotApplication.class, args);
             CommandReader cmdReader = new CommandReader();
 
@@ -95,10 +88,11 @@ public class BotApplication {
                 try {
                     cmdReader.read(update);
 
-                }catch (Exception e){
-                    System.out.println("Read command ex");
-                    System.out.println(e);
-                    writer.println("Read command ex");
+                } catch (Exception e) {
+                    String erm = "Read command ex";
+                    LOGGER.warn(erm);
+                    LOGGER.error(e);
+                    writer.println(erm);
                     writer.println(e);
                 }
 
@@ -117,9 +111,9 @@ public class BotApplication {
                 }
             });
 
-        }catch (Exception e){
-            System.out.println("ex in Bot application");
-            System.out.println(e);
+        } catch (Exception e) {
+            LOGGER.warn("ex in Bot application");
+            LOGGER.warn(e);
             //PrintWriter writer = new PrintWriter("/log.txt", "UTF-8");
             writer.println(e);
             writer.close();
@@ -130,8 +124,8 @@ public class BotApplication {
         File[] children = file.listFiles();
         if (children != null) {
             for (File child : children) {
-                if(!exclusions.contains(child.toString())) {
-                    System.out.println(child.toString());
+                if (!EXCLUSIONS.contains(child.toString())) {
+                    LOGGER.always().log(child.toString());
                     all.add(child);
                     addTree(child, all);
                 }
@@ -139,21 +133,21 @@ public class BotApplication {
         }
     }
 
-    private static String getExitWord(){
-        String exitWord = null;
+    private static String getExitWord() {
+        String exWord = null;
         try {
 
             File exitWordFile = new File(
                 "./exitWord.txt");
             BufferedReader br = new BufferedReader(new FileReader(exitWordFile));
-            exitWord = br.readLine();
-            if (Objects.equals(exitWord, "NULL")|| exitWord.isEmpty()){
+            exWord = br.readLine();
+            if (Objects.equals(exWord, "NULL") || exWord.isEmpty()) {
 
-                exitWord = null;
+                exWord = null;
             }
-        }catch (IOException e){
-            System.out.println("exitWord.txt reading fail");
+        } catch (IOException e) {
+            LOGGER.error("exitWord.txt reading fail");
         }
-        return exitWord;
+        return exWord;
     }
 }

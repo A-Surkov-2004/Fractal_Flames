@@ -3,13 +3,9 @@ package edu.java.bot.CommandExecuters;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SendMessage;
-
 import java.util.Set;
-
 import static edu.java.bot.CommandReader.allColors;
-import static edu.java.bot.CommandReader.allExe;
 import static edu.java.bot.UserDataMapClass.userData;
-
 
 public class ShowCollorsExecuter extends BasicCommandExecuter {
     public ShowCollorsExecuter(String name, String description) {

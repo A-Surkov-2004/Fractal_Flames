@@ -16,9 +16,9 @@ public class AddLineExecuter extends BasicCommandExecuter {
         long id = update.message().chat().id();
         boolean ok = false;
         ok = userData.get(id).addLine();
-        if(ok) {
-            reply = (new SendMessage(id, "Строка добавлена.\n" +  userData.get(id).printCommands()));
-        }else {
+        if (ok) {
+            reply = (new SendMessage(id, "Строка добавлена.\n" + userData.get(id).printCommands()));
+        } else {
             reply = (new SendMessage(id, "Произошла ошибка. Строка не была добавлена"));
         }
         return this.reply;

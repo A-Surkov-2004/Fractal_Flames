@@ -1,4 +1,4 @@
-package project4.modifiers;
+package fractalapp.modifiers;
 
 public class HyperbolicMod extends BasicMod {
 
@@ -8,9 +8,9 @@ public class HyperbolicMod extends BasicMod {
 
     @Override
     public double[] modify(double x, double y) {
-        double r = Math.sqrt (x * x + y * y);
-        double t = Math.atan2(x,y);
-        newX = Math.sin(t)/r;
+        double r = Math.sqrt(x * x + y * y);
+        double t = Math.atan2(x, y);
+        newX = Math.sin(t) / r;
         newY = r * Math.cos(t);
         return new double[] {newX, newY};
     }

@@ -1,11 +1,9 @@
-package project4;
+package fractalapp;
 
 import edu.java.bot.UserClass;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -62,7 +60,6 @@ public class Render {
         System.out.println(totalPix);
          //*/
 
-
 ///*
         for (int i = 0; i < n; i++) {
             try {
@@ -72,7 +69,7 @@ public class Render {
             }
         }
 
- //*/
+        //*/
 
         return pixels;
 
@@ -150,37 +147,33 @@ public class Render {
         return pixels;
     }
 
-    private void renderTask(Afin[] afins, int it, List<List<String>> instructions) throws IOException, InterruptedException {
+    private void renderTask(Afin[] afins, int it, List<List<String>> instructions)
+        throws IOException, InterruptedException {
         //LOGGER.info(Thread.currentThread().getName());
 
         int randseed = ThreadLocalRandom.current().nextInt(instructions.size());
 
-
-
         double newX = ThreadLocalRandom.current().nextDouble(xRatioDispers * 2) - xRatioDispers;
         double newY = ThreadLocalRandom.current().nextDouble(yRatioDispers * 2) - yRatioDispers;
 
-        for (int step = -20; step < it; step++)
-        {
+        for (int step = -20; step < it; step++) {
 
-            rands[0] = ThreadLocalRandom.current().nextDouble(-2,2);
-            rands[1] = ThreadLocalRandom.current().nextDouble(-2,2);
-            rands[2] = ThreadLocalRandom.current().nextDouble(-2,2);
-            rands[3] = ThreadLocalRandom.current().nextDouble(-2,2);
+            rands[0] = ThreadLocalRandom.current().nextDouble(-2, 2);
+            rands[1] = ThreadLocalRandom.current().nextDouble(-2, 2);
+            rands[2] = ThreadLocalRandom.current().nextDouble(-2, 2);
+            rands[3] = ThreadLocalRandom.current().nextDouble(-2, 2);
 
             randseed = ThreadLocalRandom.current().nextInt(instructions.size());
             int afinIndex = ThreadLocalRandom.current().nextInt(afins.length);
             double x = afins[afinIndex].a() * newX + afins[afinIndex].b() * newY + afins[afinIndex].c();
             double y = afins[afinIndex].d() * newY + afins[afinIndex].e() * newY + afins[afinIndex].f();
 
-
             FractalCommandReader cmr = new FractalCommandReader();
             List<String> instructionLine = instructions.get(randseed);
-            double[] modified = cmr.readCommand(instructionLine, x,y);
+            double[] modified = cmr.readCommand(instructionLine, x, y);
             //double[] modified = mod.modify(x, y);
             newX = modified[0];
             newY = modified[1];
-
 
             if (step >= 0) {
                 int x1 = Math.abs((int) (X_RES - Math.round(((xRatioDispers - newX) / (xRatioDispers * 2)) * X_RES)));
@@ -203,10 +196,6 @@ public class Render {
                     }
                     pixels[y1][x1].hits++;
                     totalPix++;
-                    if(step % 1000 == 0){
-
-
-                    }
                 }
                 writeLock.unlock();
             }

@@ -1,22 +1,20 @@
-package project4;
+package fractalapp;
 
-
-import project4.modifiers.BasicMod;
-import project4.modifiers.DiamondMod;
-import project4.modifiers.DiskMod;
-import project4.modifiers.FisheyeMod;
-import project4.modifiers.HandkerchiefMod;
-import project4.modifiers.HeartMod;
-import project4.modifiers.HorseshoeMod;
-import project4.modifiers.HyperbolicMod;
-import project4.modifiers.PdjMod;
-import project4.modifiers.PillowMod;
-import project4.modifiers.PolarMod;
-import project4.modifiers.SinMod;
-import project4.modifiers.SphereMod;
-import project4.modifiers.SpiralMod;
-import project4.modifiers.SwirlMod;
-import project4.modifiers.WavesMod;
+import fractalapp.modifiers.BasicMod;
+import fractalapp.modifiers.DiamondMod;
+import fractalapp.modifiers.DiskMod;
+import fractalapp.modifiers.HandkerchiefMod;
+import fractalapp.modifiers.HeartMod;
+import fractalapp.modifiers.HorseshoeMod;
+import fractalapp.modifiers.HyperbolicMod;
+import fractalapp.modifiers.PdjMod;
+import fractalapp.modifiers.PillowMod;
+import fractalapp.modifiers.PolarMod;
+import fractalapp.modifiers.SinMod;
+import fractalapp.modifiers.SphereMod;
+import fractalapp.modifiers.SpiralMod;
+import fractalapp.modifiers.SwirlMod;
+import fractalapp.modifiers.WavesMod;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +22,9 @@ import java.util.Set;
 
 public class FractalCommandReader {
 
-    private Map<String, BasicMod> allCommands = new HashMap<>();;
-    public FractalCommandReader(){
+    private final Map<String, BasicMod> allCommands = new HashMap<>();
+
+    public FractalCommandReader() {
         BasicMod now;
 
         now = new DiskMod("disk");
@@ -58,9 +57,6 @@ public class FractalCommandReader {
         now = new DiamondMod("diamond");
         allCommands.put(now.name, now);
 
-        now = new FisheyeMod("fisheye");
-        allCommands.put(now.name, now);
-
         now = new HandkerchiefMod("handkerchief");
         allCommands.put(now.name, now);
 
@@ -77,8 +73,11 @@ public class FractalCommandReader {
         allCommands.put(now.name, now);
 
     }
-    public double[] readCommand(List<String> instructionLine, double x, double y) {
-        double[] xy = new double[] {x,y};
+
+    public double[] readCommand(List<String> instructionLine, double firstx, double firsty) {
+        double x = firstx;
+        double y = firsty;
+        double[] xy = new double[] {x, y};
         for (String iWord : instructionLine) {
             xy = allCommands.get(iWord).modify(x, y);
             x = xy[0];
@@ -87,7 +86,7 @@ public class FractalCommandReader {
         return xy;
     }
 
-    public Set<String> getAllCommands(){
+    public Set<String> getAllCommands() {
         return allCommands.keySet();
     }
 }

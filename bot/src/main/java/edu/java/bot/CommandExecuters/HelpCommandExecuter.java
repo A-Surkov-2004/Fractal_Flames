@@ -3,18 +3,13 @@ package edu.java.bot.CommandExecuters;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SendMessage;
-import java.util.Set;
-import static edu.java.bot.CommandReader.allExe;
-import static edu.java.bot.UserDataMapClass.userData;
-
-
-
 
 public class HelpCommandExecuter extends BasicCommandExecuter {
     public HelpCommandExecuter(String name, String description) {
         super(name, description);
     }
 
+    @SuppressWarnings("LineLength")
     @Override
     public BaseRequest execute(Update update) {
 
@@ -35,7 +30,6 @@ public class HelpCommandExecuter extends BasicCommandExecuter {
 
             Когда будете готовы запустить генератор, используйте команду /generate. Будьте терпеливы, генерация и отправка изображения занимает какое-то время!
             """;
-
 
         long id = update.message().chat().id();
 

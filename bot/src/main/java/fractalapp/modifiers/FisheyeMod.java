@@ -1,4 +1,4 @@
-package project4.modifiers;
+package fractalapp.modifiers;
 
 public class FisheyeMod extends BasicMod {
 
@@ -8,9 +8,9 @@ public class FisheyeMod extends BasicMod {
 
     @Override
     public double[] modify(double x, double y) {
-        double r = 2/ (1+Math.sqrt(x * x + y * y));
-        newX = r*y;
-        newY = r*x;
+        double r = 2 / (1 + Math.sqrt(x * x + y * y));
+        newX = r * y;
+        newY = r * x;
         return new double[] {newX, newY};
     }
 }

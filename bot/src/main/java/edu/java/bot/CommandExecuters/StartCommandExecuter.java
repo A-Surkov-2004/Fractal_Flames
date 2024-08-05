@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.UserClass;
 import static edu.java.bot.UserDataMapClass.userData;
 
+@SuppressWarnings("LineLength")
 public class StartCommandExecuter extends BasicCommandExecuter {
 
     public StartCommandExecuter(String name, String description) {
@@ -13,18 +14,16 @@ public class StartCommandExecuter extends BasicCommandExecuter {
     }
 
     private static final String HELLO_MESSAGE = """
-            Привет!
+        Привет!
 
-            Данный телеграм-бот предназначен для генерации изображений фрактального пламени.
-            Генератор обладает высокой гибкостью, из-за чего он может быть сложен в управлении, так что рекомендую прочитать /help
+        Данный телеграм-бот предназначен для генерации изображений фрактального пламени.
+        Генератор обладает высокой гибкостью, из-за чего он может быть сложен в управлении, так что рекомендую прочитать /help
 
-            Удачи!
-            """;
+        Удачи!
+        """;
 
     @Override
     public BaseRequest execute(Update update) {
-
-
 
         long id = update.message().chat().id();
         if (userData.containsKey(id)) {

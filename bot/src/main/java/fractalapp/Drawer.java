@@ -1,38 +1,31 @@
-package project4;
+package fractalapp;
 
 import edu.java.bot.UserClass;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.concurrent.TimeUnit;
-
-
+import javax.imageio.ImageIO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Drawer {
 
-    String imagePath;
-    BufferedImage myPicture;
-    Graphics2D g;
+    private final static Logger LOGGER = LogManager.getLogger();
+    private final BufferedImage myPicture;
+    private final Graphics2D g;
 
     public Drawer(String imPath) throws IOException {
-        imagePath = imPath;
-        System.out.println(imagePath);
-        myPicture = ImageIO.read(new File(imagePath));
-        System.out.println("imagePath");
+        LOGGER.always().log(imPath);
+        myPicture = ImageIO.read(new File(imPath));
+        LOGGER.always().log("imagePath");
         g = (Graphics2D) myPicture.getGraphics();
         g.setStroke(new BasicStroke(1F));
     }
-
-    private final static Logger LOGGER = LogManager.getLogger();
 
     public void draw(Pixel[][] pixels) throws InterruptedException, IOException {
         for (int i = 0; i < pixels.length; i++) { // № строки == y
@@ -44,10 +37,10 @@ public class Drawer {
                 }
             }
         }
-        record();
+        recordPng();
     }
 
-    private void record() throws IOException {
+    private void recordPng() throws IOException {
         Path p4 = UserClass.TEMPERAL_IMAGE_PATH;
         File outputfile;
         if (!Files.exists(p4)) {

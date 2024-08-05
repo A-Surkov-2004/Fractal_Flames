@@ -1,4 +1,4 @@
-package project4;
+package fractalapp;
 
 public class Pixel {
     public int r;

@@ -5,9 +5,7 @@ import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SendMessage;
 import java.util.Set;
 import static edu.java.bot.CommandReader.allConfigs;
-import static edu.java.bot.CommandReader.allMods;
 import static edu.java.bot.UserDataMapClass.userData;
-
 
 public class ShowConfEdits extends BasicCommandExecuter {
     public ShowConfEdits(String name, String description) {

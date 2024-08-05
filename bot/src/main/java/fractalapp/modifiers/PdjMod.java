@@ -1,4 +1,4 @@
-package project4.modifiers;
+package fractalapp.modifiers;
 
 public class PdjMod extends BasicMod {
 

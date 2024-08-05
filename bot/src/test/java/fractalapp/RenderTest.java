@@ -1,4 +1,4 @@
-package project4;
+package fractalapp;
 
 import edu.java.bot.UserClass;
 import org.apache.logging.log4j.LogManager;

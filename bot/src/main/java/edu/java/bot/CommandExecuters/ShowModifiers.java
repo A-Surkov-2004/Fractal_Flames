@@ -4,10 +4,8 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SendMessage;
 import java.util.Set;
-import static edu.java.bot.CommandReader.allColors;
 import static edu.java.bot.CommandReader.allMods;
 import static edu.java.bot.UserDataMapClass.userData;
-
 
 public class ShowModifiers extends BasicCommandExecuter {
     public ShowModifiers(String name, String description) {

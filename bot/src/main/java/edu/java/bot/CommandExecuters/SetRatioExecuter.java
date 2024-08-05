@@ -3,7 +3,6 @@ package edu.java.bot.CommandExecuters;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.BaseRequest;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.CommandExecuters.SetColorCommands.ColorsEnum;
 import static edu.java.bot.UserDataMapClass.userData;
 
 public class SetRatioExecuter extends BasicCommandExecuter {

@@ -15,7 +15,7 @@ public class ShowSettingsExecuter extends BasicCommandExecuter {
     public BaseRequest execute(Update update) {
         long id = update.message().chat().id();
 
-        reply = (new SendMessage(id,  userData.get(id).printAllSettings()));
+        reply = (new SendMessage(id, userData.get(id).printAllSettings()));
 
         return this.reply;
     }

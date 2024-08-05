@@ -1,20 +1,27 @@
-package project4;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import project4.Afin;
+package fractalapp;
 
 import java.util.concurrent.ThreadLocalRandom;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @SuppressWarnings("MagicNumber")
 public class AfinGen {
     private final static Logger LOGGER = LogManager.getLogger();
-    private int redLowerBorder = 50;
-    private int greenLowerBorder = 50;
-    private int blueLowerBorder = 50;
-    private int redUpperBorder = 255;
-    private int greenUpperBorder = 255;
-    private int blueUpperBorder = 255;
+    private int redLowerBorder;
+    private int greenLowerBorder;
+    private int blueLowerBorder;
+    private int redUpperBorder;
+    private int greenUpperBorder;
+    private int blueUpperBorder;
+
+    public AfinGen() {
+        redLowerBorder = 50;
+        greenLowerBorder = 50;
+        blueLowerBorder = 50;
+        redUpperBorder = 255;
+        greenUpperBorder = 255;
+        blueUpperBorder = 255;
+    }
 
     public void setColorBorders(
         int lowerRed,

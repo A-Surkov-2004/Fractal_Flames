@@ -1,1 +1,0 @@
-org.springframework.boot.devtools.restart.SilentExitExceptionHandler$SilentExitException
